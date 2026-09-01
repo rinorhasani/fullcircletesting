@@ -30,25 +30,23 @@ jobs:
       - name: Push images
         run: docker compose -f docker-compose.prod.yml push
 
-  # deploy:
-  #   needs: build-and-push
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: ssh and redeploy
-  #       uses: appleboy/ssh-action@v1
-  #       with:
-  #         host: ${{ secrets.SSH_HOST }}
-  #         username: ${{ secrets.SSH_USERNAME }}
-  #         password: ${{ secrets.SSH_PASSWORD }}
-  #         port: ${{ secrets.SSH_PORT }}
-  #         script: |
-  #           docker pull ghcr.io/rinorhasani/fullcircletesting:latest
-  #           docker stop frontend || true
-  #           docker rm frontend ||  true 
-  #           docker run -d \
-  #             --name frontend \
-  #             -p 80:3000 \
-  #             ghcr.io/rinorhasani/fullcircletesting:latest
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: ssh and redeploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /opt/myapp
+            docker compose pull
+            docker compose up -d
+            docker images prune -f 
+    
               
           
       
