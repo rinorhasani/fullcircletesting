@@ -45,7 +45,7 @@ jobs:
             cd /opt/myapp
             docker compose pull
             docker compose up -d
-            docker images prune -f 
+            docker image prune -f 
     
               
         
