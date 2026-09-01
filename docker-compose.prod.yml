@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build:
+      context: frontend
+      target: development
+    image: ghcr.io/${REPO}-frontend:${TAG}
+
+  backend:
+    build:
+      context: backend
+      target: development
+    image: ghcr.io/${REPO}-backend:${TAG}
